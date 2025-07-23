@@ -2,7 +2,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXZyaDNwNnV2NnJkNmIzbGZ1MzBjd3Q4dWVoMDBzMzZ1ZmluNGc0OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rbwoL7kN0M8hnPMDkC/giphy.gif') no-repeat center center;
+    background: url('https://i.pinimg.com/736x/6c/bb/36/6cbb36a34afe45944dc1280aed5f9c0c.jpg') no-repeat center center;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -22,7 +22,7 @@ body {
     pointer-events: none;
 }
 
-#welcome-screen {
+#welcome-screen, #payment-screen, #verification-screen {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,7 +30,7 @@ body {
     width: 100%;
 }
 
-.welcome-content {
+.welcome-content, .verification-content, .form-container {
     background: rgba(255, 255, 255, 0.85);
     padding: 40px;
     border-radius: 12px;
@@ -41,17 +41,17 @@ body {
     text-align: center;
 }
 
-.welcome-content h1 {
+.welcome-content h1, .verification-content h1, .form-container h1 {
     color: #007bff;
     margin-bottom: 20px;
 }
 
-.welcome-content p {
+.welcome-content p, .verification-content p, .form-container p {
     font-size: 18px;
     margin-bottom: 20px;
 }
 
-.welcome-content button {
+.welcome-content button, .verification-content button, .form-container button {
     padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
@@ -62,33 +62,8 @@ body {
     margin-top: 20px;
 }
 
-.welcome-content button:hover {
+.welcome-content button:hover, .verification-content button:hover, .form-container button:hover {
     background-color: #0056b3;
-}
-
-#payment-screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.form-container {
-    background: rgba(255, 255, 255, 0.85);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    box-sizing: border-box;
-    border: 2px solid #007bff;
-}
-
-.form-container h1 {
-    text-align: center;
-    color: #007bff;
-    margin-bottom: 20px;
 }
 
 .form-group {
@@ -110,31 +85,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 6px;
     box-sizing: border-box;
-}
-
-.error {
-    color: red;
-    font-size: 12px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    margin-top: 20px;
-}
-
-button:hover {
-    background-color: #0056b3;
 }
 
 .payment-processor {
